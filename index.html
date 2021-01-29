@@ -28,7 +28,7 @@
 
             <div v-if="showProduct">
                 <div v-for="lesson in product">
-                    <img v-bind:src="/lesson.image" alt="subject icon">
+                    <img v-bind:src="lesson.image" alt="subject icon">
                     <p>Title: {{lesson.title}}</p>
                     <p>Location: {{lesson.location}}</p>
                     <p>Price: £{{lesson.price}}</p>
