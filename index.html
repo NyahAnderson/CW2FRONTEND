@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="styling.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+
+            <h1>{{ sitename }}
+
+                <button type="default" v-on:click="showCheckout" v-show="canCheckout">
+                    {{ cartItemCount}} In Cart
+                </button>
+            </h1>
+
+        </header>
+
+        <main>
+
+            <div v-if="showProduct">
+                <div v-for="lesson in product">
+                    <img v-bind:src="lesson.image" alt="subject icon">
+                    <p>Title: {{lesson.title}}</p>
+                    <p>Location: {{lesson.location}}</p>
+                    <p>Price: £{{lesson.price}}</p>
+                    <p>Spaces: {{lesson.spaces}}</p>
+                    <button class="default" v-on:click="addToCart(product)"> Add To Cart</button>
+
+                </div>
+
+
+            </div>
+            <div v-else>
+                <h2>Cart</h2>
+
+                <div v-for="lesson in cart">
+                    <p>Title: {{lesson.title}}</p>
+                    <p>Location: {{lesson.location}}</p>
+                    <p>Price: £{{lesson.price}}</p>
+                    <p>Spaces: {{lesson.spaces}}</p>
+
+                    <button class="default" v-on:click="removeItemFromCart(product)"> Remove From Cart</button>
+
+
+                </div>
+
+                <p>
+                <h2>Checkout</h2>
+                <strong>First Name:</strong>
+
+                <input type="text" v-model.trim="order.firstName" v-on:keypress="checkLetters($event)" />
+                </p>
+                <p>
+                    <strong>Phone Number</strong>
+                    <input v-model.number="order.phoneNumber" v-on:keypress="checkNumbers($event)" />
+                </p>
+
+                <h2>Order Information</h2>
+                <p>First Name: {{order.firstName}}</p>
+                <p>Phone Number: {{order.phoneNumber}}</p>
+                <button v-on:click="submitForm" v-show="canSubmitOrder">Submit Order</button>
+         
+            </div>
+    </div>
+
+    </main>
+
+    </div>
+</body>
+
+
+<script>
+    var webstore = new Vue({
+        el: '#app',
+        data: {
+            sitename: "After School Club",
+
+            showProduct: true,
+
+            order: {
+                firstName: '',
+                phoneNumber: ''
+            },
+            
+            cart: [],
+            product: {},
+            
+        },
+        created: function () {
+            fetch('https://cw-2.herokuapp.com/collection/LessonInfo').then(
+                function (response) {
+                    response.json().then(
+                        function (json) {
+                            webstore.product = json;
+                        });
+                })
+
+        },
+        methods: {
+            addToCart: function (product) {
+                this.cart.push(this.product);
+                this.product.spaceNumber--;
+
+                
+            },
+
+
+
+            removeItemFromCart: function (product) {
+                this.cart.splice(this.cart.indexOf(product), 1);
+                product.spaceNumber++;
+
+            },
+
+
+            showCheckout() {
+                this.showProduct = this.showProduct ? false : true;
+            },
+
+            submitForm() {
+
+                alert('Order submitted!')
+            },
+
+
+
+            canAddToCart(product) {
+                return webstore.product.spaceNumber > 0;
+            },
+
+            checkNumbers: function ($event) {
+                if (event.charCode > 47 && event.charCode <= 57) {
+                    return true;
+                } else {
+                    $event.preventDefault();
+                }
+
+
+            },
+            checkLetters: function ($event) {
+                if (event.charCode > 64 && event.charCode <= 90 || event.charCode > 96 && event.charCode <= 122) {
+                    return true;
+                } else {
+                    $event.preventDefault();
+                }
+
+            },
+        },
+
+
+        computed: {
+            cartItemCount() {
+                return this.cart.length;
+            },
+
+            canCheckout() {
+                return this.cart.length > 0;
+            },
+
+            canSubmitOrder() {
+                if (this.order.firstName && this.order.phoneNumber) {
+                    return true;
+                }
+            },
+        },
+
+
+    });
+
+</script>
+
+</html>
