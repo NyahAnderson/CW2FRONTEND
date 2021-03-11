@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="styling.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="manifest" href="petstore.webmanifest">
+    <link rel="manifest" href="webstore.webmanifest">
 
     <title>Document</title>
 </head>
 
 <body>
+    <script>
+        if('serviceWorker' in navigator) {
+navigator.serviceWorker.register('service-worker.js');
+};
+
+    </script>
     <div id="app">
         <header>
 
