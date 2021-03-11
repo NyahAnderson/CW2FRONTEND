@@ -1,0 +1,15 @@
+{
+    "name": "My webstore",
+    "short_name": "webstore",
+    "description": "online school webstore",
+    " icons": [
+        {
+            "src": "schoolicon.png",
+            " sizes":"512x512",
+            " type": "image/png" 
+        }
+    ],
+    " start_url":"index.html",
+    " display": "fullscreen",
+    " background_color": "#B12A34"
+}
